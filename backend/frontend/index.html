@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f9fc">
+  <title>CodeLens AI — Code Review</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="CodeLens AI home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 28 10v12L16 29 4 22V10z"/><path d="m12 11-5 5 5 5M20 11l5 5-5 5M18 9l-4 14"/></svg></span>
+        <span><strong>CodeLens</strong><small>AI CODE REVIEWER</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <button class="workspace-switch" type="button"><span class="workspace-avatar">C</span><span><strong>My Workspace</strong><small>Personal project</small></span><span class="chevron">⌄</span></button>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-view="overview" type="button"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-link" data-view="review" type="button"><span class="nav-icon">⌘</span> AI Code Review</button>
+        <button class="nav-link" data-view="findings" type="button"><span class="nav-icon">◉</span> Findings <span class="nav-count" id="navIssueCount">—</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><span class="help-icon">✦</span><strong>Make code better.</strong><p>Catch issues early and ship with confidence.</p><button type="button" class="help-link" data-view="review">Start a review <span>→</span></button></div>
+        <button class="nav-link muted-nav" type="button" data-view="settings"><span class="nav-icon">⚙</span> Settings</button>
+        <div class="profile"><div class="profile-avatar">U</div><div><strong>Developer</strong><small>Local workspace</small></div><span class="profile-dots">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-separator">/</span><strong id="pageCrumb">Overview</strong></div>
+        <div class="topbar-actions"><span class="system-status"><span class="status-dot"></span> API workspace</span><button class="avatar-button" type="button" aria-label="Profile">U</button></div>
+      </header>
+
+      <div class="page-content">
+        <section class="view-section" id="overviewView">
+          <div class="page-heading">
+            <div><div class="eyebrow">YOUR CODE, AT A GLANCE</div><h1>Overview</h1><p class="page-subtitle">Review code quality, spot risks, and keep your Python projects healthy.</p></div>
+            <button class="primary-button" type="button" data-view="review"><span>＋</span> New code review</button>
+          </div>
+          <div class="welcome-banner">
+            <div class="banner-copy"><span class="banner-pill"><span class="status-dot"></span> AI-powered analysis</span><h2>Write better code with confidence.</h2><p>Run a review on a local Python file or a public GitHub file to uncover issues and get actionable suggestions.</p><button class="banner-button" type="button" data-view="review">Start reviewing <span>→</span></button></div>
+            <div class="banner-art" aria-hidden="true"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-code-card"><div class="art-window"><i></i><i></i><i></i></div><div class="code-line long"></div><div class="code-line medium"></div><div class="code-line short"></div><div class="art-check">✓</div></div><div class="art-spark spark-one">✦</div><div class="art-spark spark-two">✧</div></div>
+          </div>
+          <div class="section-title-row"><div><h2>Review overview</h2><p>Metrics from your latest review</p></div><span class="subtle-label" id="overviewUpdated">Waiting for first review</span></div>
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-top"><span class="metric-label">Code quality score</span><span class="metric-icon blue">◈</span></div><div class="metric-value" id="scoreMetric">—<span>/100</span></div><div class="metric-foot" id="scoreFoot">Run a review to see your score</div><div class="metric-progress"><span id="scoreProgress"></span></div></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-label">Total findings</span><span class="metric-icon purple">⌁</span></div><div class="metric-value" id="totalMetric">—</div><div class="metric-foot">Issues identified in latest review</div><div class="metric-mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-label">High-severity issues</span><span class="metric-icon red">!</span></div><div class="metric-value" id="highMetric">—</div><div class="metric-foot">Prioritize these for investigation</div><div class="metric-foot-badge"><span class="severity-dot high-dot"></span> High priority</div></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-label">Risk assessment</span><span class="metric-icon amber">⌖</span></div><div class="metric-value risk-metric" id="riskMetric">—</div><div class="metric-foot">Based on the latest report</div><div class="risk-indicator"><i></i><i></i><i></i><i></i><i></i></div></article>
+          </div>
+          <div class="overview-grid">
+            <article class="content-card trend-card"><div class="card-heading"><div><h3>Finding severity</h3><p>Distribution from the latest report</p></div><span class="card-heading-icon">↗</span></div><div id="severityChart" class="severity-chart"><div class="empty-chart"><span class="empty-chart-icon">▥</span><strong>Your chart will appear here</strong><p>Run a review to visualize finding severity.</p></div></div><div class="chart-legend"><span><i class="legend-dot critical"></i>Critical</span><span><i class="legend-dot high"></i>High</span><span><i class="legend-dot medium"></i>Medium</span><span><i class="legend-dot low"></i>Low / Other</span></div></article>
+            <article class="content-card latest-card"><div class="card-heading"><div><h3>Latest review</h3><p>Most recent analysis result</p></div><button class="text-button" type="button" data-view="findings">View findings →</button></div><div id="latestReview" class="latest-empty"><div class="empty-icon">⌘</div><strong>No reviews yet</strong><p>Your report summary will appear here after your first review.</p><button class="secondary-button" type="button" data-view="review">Review Python code</button></div></article>
+          </div>
+          <article class="content-card recent-card"><div class="card-heading"><div><h3>Quick actions</h3><p>Choose how you want to review your code</p></div></div><div class="quick-actions"><button class="quick-action" type="button" data-view="review"><span class="quick-icon blue">↑</span><span><strong>Upload a Python file</strong><small>Review a local .py file from your computer</small></span><span class="quick-arrow">→</span></button><button class="quick-action" type="button" data-view="review" data-review-tab="github"><span class="quick-icon purple">⌘</span><span><strong>Review from GitHub</strong><small>Analyze a Python file from a public repository</small></span><span class="quick-arrow">→</span></button></div></article>
+        </section>
+
+        <section class="view-section hidden" id="reviewView">
+          <div class="page-heading"><div><div class="eyebrow">ANALYZE YOUR PYTHON</div><h1>AI Code Review</h1><p class="page-subtitle">Find potential bugs, security concerns, and quality issues with AI-assisted analysis.</p></div><span class="secure-label"><span class="status-dot"></span> Review workspace</span></div>
+          <div class="content-card review-card">
+            <div class="review-tabs" role="tablist" aria-label="Review source"><button class="review-tab active" id="localTab" role="tab" aria-selected="true" type="button"><span>↑</span> Upload file</button><button class="review-tab" id="githubTab" role="tab" aria-selected="false" type="button"><span>⌘</span> GitHub file</button></div>
+            <div class="review-panel" id="localPanel">
+              <div class="input-intro"><div class="input-icon">↑</div><div><h2>Upload a Python file</h2><p>Select a local <code>.py</code> file to run it through your code review pipeline.</p></div></div>
+              <label class="drop-zone" id="dropZone" for="fileInput"><input type="file" id="fileInput" accept=".py,text/x-python"><span class="upload-illustration">↑</span><strong id="fileNameLabel">Drop your Python file here</strong><span class="drop-hint">or <u>browse files</u> on your computer</span><span class="file-requirement">Python files only · .py</span></label>
+              <div class="form-actions"><p id="status" class="status-message" role="status" aria-live="polite"></p><button class="primary-button" id="reviewButton" type="button">Analyze Python file <span>→</span></button></div>
+            </div>
+            <div class="review-panel hidden" id="githubPanel">
+              <div class="input-intro"><div class="input-icon github-icon">⌘</div><div><h2>Review a GitHub file</h2><p>Provide a public repository URL and the path to the Python file you want to inspect.</p></div></div>
+              <div class="form-field"><label for="repoUrl">Public GitHub repository URL</label><input type="url" id="repoUrl" placeholder="https://github.com/owner/repository" autocomplete="url"><small>Use the repository's main URL, not a file URL.</small></div>
+              <div class="form-field"><label for="filePath">Path to Python file</label><input type="text" id="filePath" placeholder="src/example.py" autocomplete="off"><small>Enter the file path relative to the repository root.</small></div>
+              <div class="form-actions"><p id="githubStatus" class="status-message" role="status" aria-live="polite"></p><button class="primary-button" id="githubReviewButton" type="button">Review GitHub file <span>→</span></button></div>
+            </div>
+          </div>
+          <div class="info-strip"><span class="info-symbol">i</span><p>Your existing backend performs the analysis. This interface sends local files to <code>/upload</code> and GitHub file requests to <code>/review-github</code>.</p></div>
+        </section>
+
+        <section class="view-section hidden" id="findingsView">
+          <div class="page-heading"><div><div class="eyebrow">REVIEW RESULTS</div><h1>Findings</h1><p class="page-subtitle">Inspect issues detected in your most recent code review.</p></div><button class="secondary-button" type="button" data-view="review">＋ New review</button></div>
+          <div class="findings-summary" id="findingsSummary"><div class="findings-summary-icon">◉</div><div><strong>Waiting for a review</strong><p>Run a code review to see issue details and recommendations.</p></div></div>
+          <div class="filter-row"><div class="filter-label">All findings <span id="findingCount">0</span></div><label class="filter-control">Severity <select id="severityFilter"><option value="all">All severities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low / Other</option></select></label></div>
+          <div class="content-card findings-card"><div id="findings" class="findings-list"><div class="empty-state"><div class="empty-icon">✓</div><h3>No findings to display</h3><p>Review a Python file to populate this list.</p><button class="secondary-button" type="button" data-view="review">Start a review</button></div></div></div>
+          <div class="results-grid"><article class="content-card"><div class="card-heading"><div><h3>Strengths</h3><p>What your code is doing well</p></div><span class="metric-icon green">✓</span></div><ul id="strengths" class="insight-list"><li>Strengths will appear after a review.</li></ul></article><article class="content-card"><div class="card-heading"><div><h3>Suggested improvements</h3><p>Potential next steps</p></div><span class="metric-icon amber">✦</span></div><ul id="improvements" class="insight-list"><li>Suggestions will appear after a review.</li></ul></article></div>
+        </section>
+
+        <section class="view-section hidden" id="settingsView">
+          <div class="page-heading"><div><div class="eyebrow">PREFERENCES</div><h1>Settings</h1><p class="page-subtitle">Review workspace configuration.</p></div></div>
+          <article class="content-card settings-card"><div class="settings-row"><div><h3>Backend API</h3><p>The frontend is configured to call your local FastAPI server.</p></div><code>http://127.0.0.1:8000</code></div><div class="settings-row"><div><h3>Local file review</h3><p>Endpoint used to submit a Python file.</p></div><code>POST /upload</code></div><div class="settings-row"><div><h3>GitHub file review</h3><p>Endpoint used to request a review of a public repository file.</p></div><code>POST /review-github</code></div><div class="settings-note">To use a different backend address, update the API_BASE constant near the top of <code>script.js</code>.</div></article>
+        </section>
+
+        <footer class="app-footer"><span>CodeLens AI <span class="footer-dot">·</span> Python code review</span><span>Built for clearer, more actionable reviews</span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
